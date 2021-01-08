@@ -26,9 +26,10 @@ commands:
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
+            cd ~/Test-Project/backend
+            npm install
+            cd backend
+            npm run migrations:revert
               exit 1
             fi
             
@@ -43,7 +44,7 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            cd frontend
+            cd ~/Test-Project/frontend
             npm i
             npm run build
             exit 1
@@ -61,7 +62,7 @@ jobs:
       - run:
           name: Back-end build
           command: |
-             cd backend
+             cd ~/Test-Project/backend
              npm i
              npm run build
              exit 1
