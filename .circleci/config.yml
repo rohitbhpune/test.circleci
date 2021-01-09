@@ -26,7 +26,7 @@ commands:
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
-            cd ~/Test-Project/backend
+            cd backend
             npm install
             cd backend
             npm run migrations:revert
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            cd ~/Test-Project/frontend
+            cd frontend
             npm i
             npm run build
             exit 1
@@ -62,7 +62,7 @@ jobs:
       - run:
           name: Back-end build
           command: |
-             cd ~/Test-Project/backend
+             cd backend
              npm i
              npm run build
              exit 1
