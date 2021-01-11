@@ -26,10 +26,10 @@ commands:
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
-            cd backend
-            npm install
-            cd backend
-            npm run migrations:revert
+            #cd backend
+            #npm install
+            #cd backend
+            #npm run migrations:revert
               exit 1
             fi
             
@@ -66,7 +66,7 @@ jobs:
              cd backend
              npm install
              npm run build
-             #npm audit fix --force
+             
              exit 1
       - save_cache:
           paths: [backend/node_modules]
