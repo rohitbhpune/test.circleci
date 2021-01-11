@@ -45,8 +45,9 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
+            
+            npm i
             npm audit fix --force
-            npm i            
             npm run build
             exit 1
       - save_cache:
@@ -64,8 +65,9 @@ jobs:
           name: Back-end build
           command: |
              cd backend
+             
+             npm i
              npm audit fix --force
-             npm i             
              npm run build             
              exit 1
       - save_cache:
