@@ -1,7 +1,7 @@
 version: 2.1
 
-#orbs:
-  #ms-teams: cloudradar-monitoring/ms-teams@0.0.1
+orbs:
+  ms-teams: cloudradar-monitoring/ms-teams@0.0.1
   
 commands: 
   destroy-environment:
@@ -155,7 +155,7 @@ jobs:
       - image: amazon/aws-cli 
     branches:
       only:
-        - master        
+        - master      
     steps:
       - checkout
       - run: yum -y install tar gzip
@@ -326,8 +326,10 @@ jobs:
             
 
 workflows:
+  ms-teams:
   default:
     jobs:
+      -  ms-teams/run
       - build-frontend
       - build-backend
       - test-frontend:
