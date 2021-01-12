@@ -153,10 +153,9 @@ jobs:
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli 
-    #branches:
-      #only:
-        #- master
-        #- /te-.*/
+    branches:
+      only:
+        - master
     steps:
       - checkout
       - run: yum -y install tar gzip
@@ -165,33 +164,39 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=udapeople \
-               --stack-name "udapeople-backend-${kk1j287dhjppmz438}" \
-               --parameter-overrides ID="${kk1j287dhjppmz438}"  
+              --tags project=Udapeople \
+               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=udapeople \
-               --stack-name "udapeople-frontend-${kk1j287dhjppmz438}" \
-               --parameter-overrides ID="${kk1j287dhjppmz438}"  
+              --tags project=Udapeople \
+               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances \
-              --filters "Name=tag:name, Values= backend-${kk1j287dhjppmz438}" \
+            BACKEND_IP= $(aws ec2 describe-instances) \
+              --filters "Name=tag:name, Values= udapeople-backend-ec2-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PuclicIpAddress' \
-              --output text >> .circleci/ansible.inventory.txt 
+              --output text)  
+            echo "BACKEND IP:"
+            echo ${BACKEND_IP}
+            curl -H "Content-Type: text/plain" \
+               -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
+               --request PUT \
+               --data ${BACKEND_IP} https://api.memstash.io/values/backendip
             
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - project
       - destroy-environment:
-          workflow_id: "${kk1j287dhjppmz438}"
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
           event: on_fail
 
   #configure-infrastructure:
@@ -343,9 +348,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          #filters:
-            #branches:
-              #only: [test-feature-branch]
+          filters:
+            branches:
+              only: [master]
       #- configure-infrastructure:
           #requires: [deploy-infrastructure]
       #- run-migrations:
