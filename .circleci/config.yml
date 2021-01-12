@@ -4,17 +4,22 @@ version: 2.1
   #ms-teams: cloudradar-monitoring/ms-teams@0.0.1
   
 commands:
-  #destroy-environment:
-    #description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    #parameters:
-      # Add parameter here   
-    #steps:
-      #- run:
-          #name: Destroy environments
-          #when: on_fail
-          #command: |
-            # Your code here
-            #exit 1
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      workflow_id:
+        type: string
+      event:
+        type: string
+    steps:
+      - run:
+          name: Destroy environments <<parameters.workflow_id>>
+          when: on_fail
+          command: |
+            echo "Destroying environment <<parameters.workflow_id>>"
+            aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
+            aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<<parameters.workflow_id>>
 
   #revert-migrations:
     #description: Revert the last migration if successfully run in the current workflow.
@@ -151,7 +156,7 @@ jobs:
     branches:
       only:
         - master
-        - /rc-.*/
+        
     steps:
       - Checkout
       - run: yum-y install tar gzip
