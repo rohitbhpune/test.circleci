@@ -155,7 +155,7 @@ jobs:
       - image: amazon/aws-cli 
     branches:
       only:
-        - master
+        - test-feature-branch
     steps:
       - checkout
       - run: yum -y install tar gzip
