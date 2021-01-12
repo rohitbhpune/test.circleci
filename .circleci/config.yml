@@ -3,7 +3,7 @@ version: 2.1
 #orbs:
   #ms-teams: cloudradar-monitoring/ms-teams@0.0.1
   
-commands:
+commands: 
   #destroy-environment:
     #description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     #parameters:
@@ -153,12 +153,11 @@ jobs:
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli 
-    branches:
-      only:
-        - master
-        
+    #branches:
+      #only:
+        #- master        
     steps:
-      - Checkout
+      - checkout
       - run: yum-y install tar gzip
       - run:
           name: Ensure back-end infrastructure exists
