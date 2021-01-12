@@ -1,2 +1,1 @@
-[web]
 ec2-18-217-1-233.us-east-2.compute.amazonaws.com
