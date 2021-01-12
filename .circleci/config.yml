@@ -164,30 +164,30 @@ jobs:
                --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
-      #- run:
-          #name: Ensure front-end infrastructure exist
-          #command: |
-            #aws cloudformation deploy \
-              #--template-file .circleci/files/frontend.yml \
-              #--tags project=udapeople \
-               #--stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               #--parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --tags project=udapeople \
+               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
-      #- run:
-          #name: Add back-end ip to ansible inventory
-          #command: |
-            #aws ec2 describe-instances \
-              #--filters "Name=tag:name, Values= backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              #--query 'Reservations[*].Instances[*].PuclicIpAddress' \
-              #--output text >> .circleci/ansible.inventtory.txt 
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            aws ec2 describe-instances \
+              --filters "Name=tag:name, Values= backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PuclicIpAddress' \
+              --output text >> .circleci/ansible.inventtory.txt 
             
-      #- persist_to_workspace:
-          #root: ~/
-          #paths:
-            #- project/.circleci/ansible/inventory.txt
-      #- destroy environment:
-        #workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-        #event: on_fail
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      - destroy environment:
+        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+        event: on_fail
 
   #configure-infrastructure:
     #docker:
@@ -336,9 +336,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          #filters:
-            #branches:
-              #only: [test-feature-branch]
+          filters:
+            branches:
+              only: [test-feature-branch]
       #- configure-infrastructure:
           #requires: [deploy-infrastructure]
       #- run-migrations:
