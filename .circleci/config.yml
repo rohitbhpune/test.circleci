@@ -4,22 +4,22 @@ version: 2.1
   #ms-teams: cloudradar-monitoring/ms-teams@0.0.1
   
 commands:
-  destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    parameters:
-      workflow_id:
-        type: string
-      event:
-        type: string
-    steps:
-      - run:
-          name: Destroy environments <<parameters.workflow_id>>
-          when: on_fail
-          command: |
-            echo "Destroying environment <<parameters.workflow_id>>"
-            aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
-            aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.workflow_id>>
-            aws cloudformation delete-stack --stack-name udapeople-frontend-<<parameters.workflow_id>>
+  #destroy-environment:
+    #description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    #parameters:
+      #workflow_id:
+        #type: string
+      #event:
+        #type: string
+    #steps:
+      #- run:
+          #name: Destroy environments <<parameters.workflow_id>>
+          #when: on_fail
+          #command: |
+            #echo "Destroying environment <<parameters.workflow_id>>"
+            #aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
+            #aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.workflow_id>>
+            #aws cloudformation delete-stack --stack-name udapeople-frontend-<<parameters.workflow_id>>
 
   #revert-migrations:
     #description: Revert the last migration if successfully run in the current workflow.
@@ -164,35 +164,35 @@ jobs:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
-              --template-file .circleci/files/backend.yml \
-              --tags project=udapeople \
-               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              #--template-file .circleci/files/backend.yml \
+              #--tags project=udapeople \
+               #--stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+               #--parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=udapeople \
-               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              #--tags project=udapeople \
+               #--stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+               #--parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
-              --filters "Name=tag:name, Values= backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PuclicIpAddress' \
-              --output text >> .circleci/ansible.inventtory.txt 
+              #--filters "Name=tag:name, Values= backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              #--query 'Reservations[*].Instances[*].PuclicIpAddress' \
+              #--output text >> .circleci/ansible.inventtory.txt 
             
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy environment:
-        workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-        event: on_fail
+      #- destroy environment:
+        #workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+        #event: on_fail
 
   #configure-infrastructure:
     #docker:
@@ -341,9 +341,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
+          #filters:
+            #branches:
+              #only: [test-feature-branch]
       #- configure-infrastructure:
           #requires: [deploy-infrastructure]
       #- run-migrations:
