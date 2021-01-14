@@ -162,25 +162,8 @@ jobs:
               --tags project=Udapeople \
               --stack-name "udapeople-backend-prod-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-289c9ab
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-5219a89
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-12496e8
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-7580964
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-fd3af5e
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-9bf0f2a
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-dfda622
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-038b042
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-3594d23
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-a5d4fbf
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-5894623
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-2776d5c
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-995c016
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-e9de79c
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-99e0660
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-8f7d74f
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-b19a764
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-6af6057
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-7f4d373
+      - run: return 1
+
       - run:
           name: Ensure front-end infrastructure exist
           command: |
