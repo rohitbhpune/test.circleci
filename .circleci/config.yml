@@ -12,20 +12,15 @@ commands:
         default: ${CIRCLE_WORKFLOW_ID:0:7}      
     steps:
       - run:
-          name: Destroy environments <<parameters.workflow_id>>
+          name: Destroy environments
           when: on_fail
           command: |
-            echo "Destroying environment ${CIRCLE_WORKFLOW_ID}"
             aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-            aws cloudformation delete-stack --stack-name  udapeople-backend-prod-${CIRCLE_WORKFLOW_ID}
-            aws cloudformation delete-stack --stack-name  udapeople-frontend-prod-${CIRCLE_WORKFLOW_ID}
+            aws cloudformation delete-stack --stack-name  udapeople-backend-prod-<< parameters.workflow-id >>
+            aws cloudformation delete-stack --stack-name  udapeople-frontend-prod-<< parameters.workflow-id >>
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-       workflow_id:
-        type: string
-        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Revert migrations
@@ -162,8 +157,6 @@ jobs:
               --tags project=Udapeople \
               --stack-name "udapeople-backend-prod-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-9e1ad71
-            aws cloudformation describe-stack-events --stack-name udapeople-backend-prod-a116d58
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -176,9 +169,9 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             echo -e "[web]\n" > ./.circleci/ansible/inventory.txt
-            aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
+            aws ec2 describe-instances \              
               --query 'Reservations[*].Instances[*].PuclicIpAddress' \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
               --output text >> ./.circleci/ansible/inventory.txt  
             cat ./.circleci/ansible/inventory.txt
 
@@ -199,8 +192,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment
 
   configure-infrastructure:
     docker:
@@ -222,8 +214,7 @@ jobs:
           command: |
             cd .circleci/ansible/
             ansible-playbook -i inventory.txt playbook.yml
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment
 
   run-migrations:
     docker:
@@ -256,11 +247,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-     
+      - destroy-environment
+      - revert-migrations     
 
   deploy-frontend:
     docker:
@@ -289,10 +277,8 @@ jobs:
             cd frontend
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment
+      - revert-migrations
                     
   deploy-backend:
     docker:
@@ -327,11 +313,8 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible/
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-  
+      - destroy-environment
+      - revert-migrations  
 
   smoke-test:
     docker:
