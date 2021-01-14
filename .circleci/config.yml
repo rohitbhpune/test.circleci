@@ -161,7 +161,8 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=Udapeople \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"              
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+            aws cloudformation describe-stack-events --stack-name udapeople-backend-289c9ab
       - run:
           name: Ensure front-end infrastructure exist
           command: |
