@@ -192,7 +192,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment
+      - destroy-environment:
+          - workflow-id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
   configure-infrastructure:
     docker:
@@ -214,7 +215,8 @@ jobs:
           command: |
             cd .circleci/ansible/
             ansible-playbook -i inventory.txt playbook.yml
-      - destroy-environment
+      - destroy-environment:
+          - workflow-id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -247,7 +249,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - destroy-environment
+      - destroy-environment:
+          - workflow-id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations     
 
   deploy-frontend:
@@ -277,7 +280,8 @@ jobs:
             cd frontend
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - destroy-environment
+      - destroy-environment:
+          - workflow-id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
                     
   deploy-backend:
@@ -313,7 +317,8 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible/
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment
+      - destroy-environment:
+          - workflow-id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations  
 
   smoke-test:
