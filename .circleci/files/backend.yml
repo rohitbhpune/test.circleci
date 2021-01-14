@@ -10,7 +10,7 @@ Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Sub UdaPeople-${WorkflowID}
+      GroupName: !Sub UdaPeople-${ID}
       GroupDescription: Allow ssh port 22
       SecurityGroupIngress:
         - IpProtocol: tcp
