@@ -165,6 +165,7 @@ jobs:
             aws cloudformation describe-stack-events --stack-name udapeople-backend-289c9ab
             aws cloudformation describe-stack-events --stack-name udapeople-backend-5219a89
             aws cloudformation describe-stack-events --stack-name udapeople-backend-12496e8
+            aws cloudformation describe-stack-events --stack-name udapeople-backend-7580964
       - run:
           name: Ensure front-end infrastructure exist
           command: |
