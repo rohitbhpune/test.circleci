@@ -322,7 +322,7 @@ jobs:
           #command: |
             #aws cloudformation \
             #list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-            #--region ap-south-1 --no-paginate --output text >> ./.circleci/oldworkflowid.txt
+            #--region us-east-1 --no-paginate --output text >> ./.circleci/oldworkflowid.txt
             #aws cloudformation deploy \
               #--template-file .circleci/files/cloudfront.yml \
               #--stack-name udapeople-cloudfront \
