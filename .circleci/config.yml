@@ -166,7 +166,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["5e:91:c8:56:42:35:11:a5:3e:42:c3:1c:41:a4:96:68:b0:dd:4d:98"]
+          fingerprints: ["2b:3d:56:2a:69:a9:0a:84:b2:40:d7:e3:c0:c8:93:32"]
       - attach_workspace:
           at: ~/
       - run:
@@ -250,7 +250,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - add_ssh_keys:
-          fingerprints: ["5e:91:c8:56:42:35:11:a5:3e:42:c3:1c:41:a4:96:68:b0:dd:4d:98"]
+          fingerprints: ["2b:3d:56:2a:69:a9:0a:84:b2:40:d7:e3:c0:c8:93:32"]
       - attach_workspace:
           at: ~/
       - run:
@@ -297,7 +297,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3.ap-south-1.amazonaws.com/index.html#/employees"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3.us-east-1.amazonaws.com/index.html#/employees"
             echo "$URL"
             if curl -s $URL | grep "Welcome"
             then
